@@ -29,4 +29,17 @@
   to {
     transform: rotate(360deg);
   }
+
+}
+
+.boardClass{
+  border: 3px solid black;
+
+}
+
+.boxClass{
+  border: 1px solid black;
+  height: 100px;
+  width: 100px;
+  margin: 0;
 }
