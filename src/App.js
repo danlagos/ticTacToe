@@ -33,7 +33,7 @@ class App extends Component {
 
 componentDidMount() {
   // console.log(this.state);
-  let {boardSize, boardArr, boardColumn, winComboArr, clickCount, clickCountLimit, playerInfoArr} = this.state
+  let {boardSize, boardArr, boardColumn, winComboArr, clickCount, clickCountLimit, playerInfoArr, player1, player2} = this.state
 
   clickCountLimit = boardSize**2
   boardArr = Array(boardSize**2).fill(0)
@@ -59,7 +59,7 @@ componentDidMount() {
 
 // console.log("second win", winComboArr);
 
-  this.setState({boardArr: boardArr, boardColumn: boardColumn, winComboArr:winComboArr, clickCount:clickCount, clickCountLimit:clickCountLimit, playerInfoArr:playerInfoArr })
+  this.setState({boardArr: boardArr, boardColumn: boardColumn, winComboArr:winComboArr, clickCount:clickCount, clickCountLimit:clickCountLimit, playerInfoArr:playerInfoArr, player1:player1, player2:player2 })
 
 }
 
@@ -69,13 +69,22 @@ selectIcon=()=>{
   var x = document.getElementsByName("icon");
 
     console.log("x[0]: ",x[0].checked);
+    console.log("player1",player1);
+    if(x[0].checked){
+      player1= "❌"
+      player2= "⭕"
+    } else if(x[1].checked){
+      player1= "⭕"
+      player2= "❌"
+    }
+    console.log("player1 after",player1);
 
-  this.setState = ({player1:player1, player2:player2})
+  this.setState({player1:player1, player2:player2})
 }
 
 reSizeBoard=()=> {
   // console.log(this.state);
-  let {boardSize, boardArr, boardColumn, winComboArr, clickCount, clickCountLimit, playerInfoArr,winStatus} = this.state
+  let {boardSize, boardArr, boardColumn, winComboArr, clickCount, clickCountLimit, playerInfoArr,winStatus, player1, player2} = this.state
 
   boardSize = parseInt(document.getElementById("width").value)
   console.log("boardsize : ", boardSize);
@@ -110,14 +119,14 @@ reSizeBoard=()=> {
 
 // console.log("second win", winComboArr);
 
-  this.setState({boardArr: boardArr, boardColumn: boardColumn, winComboArr:winComboArr, clickCount:clickCount, clickCountLimit:clickCountLimit, playerInfoArr:playerInfoArr, boardSize:boardSize, winStatus:winStatus})
+  this.setState({boardArr: boardArr, boardColumn: boardColumn, winComboArr:winComboArr, clickCount:clickCount, clickCountLimit:clickCountLimit, playerInfoArr:playerInfoArr, boardSize:boardSize, winStatus:winStatus, player1:player1, player2:player2})
 
 }
 
 
 restButton = () => {
 
-  let {boardArr, clickCount, playerInfoArr, winStatus, boardSize, boardColumn, clickCountLimit} = this.state
+  let {boardArr, clickCount, playerInfoArr, winStatus, boardSize, boardColumn, clickCountLimit, player1, player2} = this.state
 
   boardArr = Array(boardSize**2).fill(0)
     boardColumn = Array(boardSize).fill('100px')
@@ -128,7 +137,7 @@ restButton = () => {
 
   winStatus = ""
 
-  this.setState({boardArr: boardArr, clickCount:clickCount, playerInfoArr:playerInfoArr, winStatus:winStatus, boardSize:boardSize, boardColumn:boardColumn, clickCountLimit:clickCountLimit})
+  this.setState({boardArr: boardArr, clickCount:clickCount, playerInfoArr:playerInfoArr, winStatus:winStatus, boardSize:boardSize, boardColumn:boardColumn, clickCountLimit:clickCountLimit, player1:player1, player2:player2})
 
 }
 
@@ -138,6 +147,8 @@ clickFun = e => {
     let matchCount = 0;
     console.log("winComboArr", winComboArr);
     console.log("clickCount", clickCount);
+    console.log("player1 emoji": player1);
+    console.log("player2 emoji": player2);
     if ((boardArr[clickedIdent] === 0 && (clickCount<(boardSize**2 )&& winStatus==""))) {
       if (clickCount % 2 === 0) {
         boardArr[clickedIdent] = 1
@@ -181,15 +192,18 @@ clickFun = e => {
 
      console.log("boardArr",boardArr);
 
-  this.setState({boardArr: boardArr, boardColumn: boardColumn, winComboArr:winComboArr, clickCount:clickCount, clickCountLimit:clickCountLimit, winStatus:winStatus, playerInfoArr:playerInfoArr})
-  console.log("winStatus",winStatus);
+  this.setState({boardArr: boardArr, boardColumn: boardColumn, winComboArr:winComboArr, clickCount:clickCount, clickCountLimit:clickCountLimit, winStatus:winStatus, playerInfoArr:playerInfoArr, player1:player1, player2:player2})
+  console.log("player1 emoji": player1);
+  console.log("player2 emoji": player2);
 
 }
+// console.log("winStatus",winStatus);
 
   render() {
+  console.log('state', this.state);
     let grids = this.state.boardArr.map((v, i) =>{
       return(
-        <Board id = {i} clickFun={this.clickFun} boardValue = {this.state.boardArr[i]} playerInfo={this.state.playerInfoArr[i]}/>
+        <Board id = {i} clickFun={this.clickFun} boardValue = {this.state.boardArr[i]} playerInfo={this.state.playerInfoArr[i]} />
 
       )
     })
@@ -203,38 +217,14 @@ clickFun = e => {
     // console.log(this.state);
     return (
       <div>
-        <Header changeBoard = {this.reSizeBoard} selectIcon = {this.selectIcon}/>
+        <Header changeBoard = {this.reSizeBoard} selectIcon = {this.selectIcon} player1={this.state.player1}  player2={this.state.player2}/>
         <div style = {gridStyle}>
         {grids}
         </div>
-        <GameInfo winner = {this.state.winStatus} restButton={this.restButton}/>
+        <GameInfo winner = {this.state.winStatus} restButton={this.restButton} player1={this.state.player1}  player2={this.state.player2}/>
       </div>
     );
   }
 }
 
 export default App;
-// app contains three components
-// app checks for win conditions in board.
-// header component that shows title
-//  board component where each player inputs
-// gaming info compoment where each player is assigned, and displays win/lose/draw status
-  // BOARD COMPONENT:  initial data - start state of board.  (meaning begining status is zero)
-  // need board size and empty board array
-  // inital data = number player (two players), genearte collumn information
-  // 0 = not clicked
-  // 1 = player 1 clicked
-  // 2 = player 2 clicked
-  // generate board array.  based on boardsize squared
-  // generate winning combination array
-  // display board in Apps, using grid method to generate square made of grids.  based on number of collumn information
-  // if 0 and valid click count less than boardsize squared, than player 1 can click to assign value
-  // if click count % 2 === 0 than player 1 turn
-  // else player 2's turn
-  //  check array status with winning combination
-  // if winning combination, game stops, and declare winner.
-  // if not than start again.(need loop)
-  // if count reaches boardsize squared, than declare draw
-  // send this information to gaming info component
-  //  game ends, declare win/los/draw status
-  // reset button to start game.  When clicked initalize board data

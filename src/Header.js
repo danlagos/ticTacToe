@@ -22,11 +22,12 @@ class Header extends Component {
           </form>
 
         </div>
+        Player 1 : {this.props.player1}, Player 2: {this.props.player2}
         <br />
         <div>
-        <form onSubmit={this.selectIcon} id="icon">
-          <input type="radio" name="icon" value="X" checked/> X
-          <input type="radio" name="icon" value="O"/> O<br/><br/>
+        <form onSubmit={this.selectIcon}>
+          <input type="radio" name="icon" value="❌" checked/> ❌
+          <input type="radio" name="icon" value="⭕"/> ⭕<br/><br/>
           <input type="submit" />
         </form>
         </div>
