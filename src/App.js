@@ -63,11 +63,24 @@ componentDidMount() {
 
 }
 
+selectIcon=()=>{
+  let {player1, player2} = this.state
+
+  var x = document.getElementsByName("icon");
+
+    console.log("x[0]: ",x[0].checked);
+
+  this.setState = ({player1:player1, player2:player2})
+}
+
 reSizeBoard=()=> {
   // console.log(this.state);
-  let {boardSize, boardArr, boardColumn, winComboArr, clickCount, clickCountLimit, playerInfoArr} = this.state
+  let {boardSize, boardArr, boardColumn, winComboArr, clickCount, clickCountLimit, playerInfoArr,winStatus} = this.state
 
   boardSize = parseInt(document.getElementById("width").value)
+  console.log("boardsize : ", boardSize);
+
+  winComboArr=[]
 
   clickCountLimit = boardSize**2
   boardArr = Array(boardSize**2).fill(0)
@@ -79,8 +92,9 @@ reSizeBoard=()=> {
 
     for (let i = 0; i < boardSize; i++) {
       winComboArr.push(tempArr.slice(i*boardSize, (i+1)*boardSize))
+      // console.log("winComboArr: ",winComboArr);
     }
-    // console.log('temp', tempArr);
+    console.log('temp', tempArr);
     for (let i = 0; i < boardSize; i++){
       let tempTwoArr = tempArr.filter(v=>v % boardSize === i)
       winComboArr.push(tempTwoArr)
@@ -91,26 +105,30 @@ reSizeBoard=()=> {
       let tempLastArr = tempArr.filter(v=>((v% (boardSize-1)) === 0)&&(v!==0)&&(v!==(boardSize**2-1)))
       winComboArr.push(tempLastArr)
 
+      winStatus=""
+      clickCount=0
+
 // console.log("second win", winComboArr);
 
-  this.setState({boardArr: boardArr, boardColumn: boardColumn, winComboArr:winComboArr, clickCount:clickCount, clickCountLimit:clickCountLimit, playerInfoArr:playerInfoArr, boardSize:boardSize })
+  this.setState({boardArr: boardArr, boardColumn: boardColumn, winComboArr:winComboArr, clickCount:clickCount, clickCountLimit:clickCountLimit, playerInfoArr:playerInfoArr, boardSize:boardSize, winStatus:winStatus})
 
 }
 
 
 restButton = () => {
 
-  let {boardArr, clickCount, playerInfoArr, winStatus, boardSize, boardColumn} = this.state
+  let {boardArr, clickCount, playerInfoArr, winStatus, boardSize, boardColumn, clickCountLimit} = this.state
 
   boardArr = Array(boardSize**2).fill(0)
     boardColumn = Array(boardSize).fill('100px')
   clickCount = 0
+  clickCountLimit = boardSize**2
 
   playerInfoArr = Array(boardSize**2).fill("")
 
   winStatus = ""
 
-  this.setState({boardArr: boardArr, clickCount:clickCount, playerInfoArr:playerInfoArr, winStatus:winStatus, boardSize:boardSize, boardColumn:boardColumn })
+  this.setState({boardArr: boardArr, clickCount:clickCount, playerInfoArr:playerInfoArr, winStatus:winStatus, boardSize:boardSize, boardColumn:boardColumn, clickCountLimit:clickCountLimit})
 
 }
 
@@ -185,7 +203,7 @@ clickFun = e => {
     // console.log(this.state);
     return (
       <div>
-        <Header changeBoard = {this.reSizeBoard}/>
+        <Header changeBoard = {this.reSizeBoard} selectIcon = {this.selectIcon}/>
         <div style = {gridStyle}>
         {grids}
         </div>
