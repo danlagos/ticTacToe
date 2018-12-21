@@ -217,7 +217,7 @@ clickFun = e => {
     // console.log(this.state);
     return (
       <div>
-        <Header changeBoard = {this.reSizeBoard} selectIcon = {this.selectIcon} player1={this.state.player1}  player2={this.state.player2}/>
+        <Header changeBoard = {this.reSizeBoard} selectIcon = {this.selectIcon} player1={this.state.player1}  player2={this.state.player2} clickCount={this.state.clickCount}/>
         <div style = {gridStyle}>
         {grids}
         </div>
